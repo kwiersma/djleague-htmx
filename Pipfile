@@ -1,0 +1,32 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+black = "==24.8.0"
+django = "==5.1.4"
+djangorestframework = "==3.15.2"
+django-health-check = "==3.18.3"
+environs = {extras = ["django"], version = "==11.0.0"}
+python-dateutil = "==2.9.0.post0"
+sentry-sdk = "==2.19.1"
+django-crispy-forms = "==2.3"
+crispy-bootstrap5 = "==2024.10"
+factory-boy = "==3.3.1"
+django-debug-toolbar = "==4.4.6"
+django-filter = "==24.3"
+pyyaml = "==6.0.2"  # Used by django-rest-framework for schema generation
+uritemplate = "==4.1.1"  # Used by django-rest-framework for schema generation
+tblib = "*"  # Used by Django for parallel test run exception reporting
+drf-spectacular = "==0.27.2"
+gunicorn = "==23.0.0"
+psycopg = "==3.2.1"
+psycopg-binary = "==3.2.1"
+whitenoise = {extras = ["brotli"], version = "==6.8.2"}
+flake8 = "==7.1.1"
+flake8-bugbear = "==24.8.19"
+unittest-xml-reporting = "==3.2.0"
+
+[requires]
+python_version = "3.12"

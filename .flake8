@@ -1,0 +1,5 @@
+[flake8]
+ignore = F841,F403,F405,W504,W503,F821
+max-line-length = 110
+exclude = .*/ */migrations/
+max-complexity = 13

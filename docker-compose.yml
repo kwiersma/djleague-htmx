@@ -1,0 +1,25 @@
+services:
+  db:
+    image: postgres:16
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
+    environment:
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
+  web:
+    build: .
+    #command: pipenv run ./manage.py runserver 0.0.0.0:8000
+    command: pipenv run gunicorn djleague.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - .:/home/app/web
+    ports:
+      - "8000:8000"
+    environment:
+      - "DJANGO_SETTINGS_MODULE=djleague.settings"
+      - "POSTGRES_HOST=db"
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
