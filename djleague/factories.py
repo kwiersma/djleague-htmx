@@ -1,23 +1,33 @@
-import django.utils.timezone
-import factory
 from factory.django import DjangoModelFactory
+import factory
 
-from accounts.models import CustomUser
-
-
-class BaseFactory(DjangoModelFactory):
-    uuid = factory.Faker("uuid4")
-    created_date = django.utils.timezone.now()
-    updated_date = django.utils.timezone.now()
+from djleague import models
 
 
-class CustomUserFactory(BaseFactory):
+class FantasyTeamFactory(DjangoModelFactory):
     class Meta:
-        model = CustomUser
+        model = models.FantasyTeam
 
-    first_name = factory.Faker("first_name")
-    last_name = factory.Faker("last_name")
-    email = factory.Faker("email")
-    username = factory.Faker("email")
-    password = factory.Faker("password")
-    is_active = True
+    name = factory.Faker("last_name")
+    owner = factory.Faker("first_name")
+    draft_order = 1
+
+
+class NFLTeam(DjangoModelFactory):
+    class Meta:
+        model = models.NFLTeam
+
+    abbrev = factory.Faker("first_name")
+    city = factory.Faker("city")
+    byeweek = 10
+
+
+class Player(DjangoModelFactory):
+    class Meta:
+        model = models.Player
+
+    lastname = factory.Faker("last_name")
+    firstname = factory.Faker("first_name")
+    team = factory.SubFactory(NFLTeam)
+    rank = 1
+    points = 100

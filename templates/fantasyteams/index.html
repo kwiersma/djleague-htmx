@@ -1,0 +1,34 @@
+{% extends "_base.html" %}
+
+{% block title %}Teams{% endblock %}
+
+{% block content %}
+
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>Draft Order</th>
+      <th>Team</th>
+      <th>Owner</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% if teams %}
+      {% for team in teams %}
+        <tr>
+          <td>{{ team.draft_order }}</td>
+          <td>{{ team.name }} ({{ team.id }})</td>
+          <td>{{ team.owner }}</td>
+          <td></td>
+        </tr>
+      {% endfor %}
+    {% else %}
+      <tr>
+        <td colspan="4">No teams have been entered</td>
+      </tr>
+    {% endif %}
+    </tbody>
+  </table>
+
+{% endblock %}

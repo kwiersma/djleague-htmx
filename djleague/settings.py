@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "health_check.db",
     "health_check.contrib.migrations",
     # Local
+    "djleague",
     "pages",
 ]
 
@@ -108,6 +109,8 @@ DATABASES = {
         "PORT": env.int("POSTGRES_PORT", 5432),
     }
 }
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-password-validators
 AUTH_PASSWORD_VALIDATORS = [
