@@ -15,7 +15,7 @@ django-crispy-forms = "==2.3"
 crispy-bootstrap5 = "==2024.10"
 factory-boy = "==3.3.1"
 django-debug-toolbar = "==5.0.1"
-django-filter = "==24.3"
+django-filter = "==25.1"
 pyyaml = "==6.0.2"  # Used by django-rest-framework for schema generation
 uritemplate = "==4.1.1"  # Used by django-rest-framework for schema generation
 tblib = "*"  # Used by Django for parallel test run exception reporting
