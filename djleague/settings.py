@@ -110,7 +110,7 @@ DATABASES = {
     }
 }
 
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-password-validators
 AUTH_PASSWORD_VALIDATORS = [

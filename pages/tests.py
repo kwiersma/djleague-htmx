@@ -2,33 +2,31 @@ from http import HTTPStatus
 
 from django.urls import reverse
 
-from accounts.models import CustomUser
-from accounts.tests import BaseTestCase
+from djleague import factories
+from djleague.tests import BaseTestCase
 
 
 class TestHome(BaseTestCase):
 
-    @classmethod
-    def setUpTestData(cls):
-        email = "test@test.com"
-        cls.user = CustomUser.objects.create_user(email=email, password="funfun", username=email)
-
-    def test_logged_in(self):
+    def test_home(self):
         # Arrange
-        self.simulate_login(self.user)
 
         # Act
         resp = self.client.get(reverse("home"))
 
         # Assert
         self.assertEqual(resp.status_code, HTTPStatus.OK)
-        self.assertIn(self.user.email, resp.rendered_content)
 
-    def test_not_logged_in(self):
+
+class TestTeamsView(BaseTestCase):
+
+    def test_list(self):
+        # Arrange
+        factories.FantasyTeamFactory()
+
         # Act
-        resp = self.client.get(reverse("home"))
+        resp = self.client.get(reverse("teams"))
 
         # Assert
         self.assertEqual(resp.status_code, HTTPStatus.OK)
-        self.assertNotIn(self.user.email, resp.rendered_content)
-        self.assertIn(reverse("account_login"), resp.rendered_content)
+        self.assertEqual(len(resp.context_data.get("teams")), 1)

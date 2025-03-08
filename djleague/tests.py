@@ -4,6 +4,10 @@ from django.core.management import call_command
 from django.test import TestCase
 
 
+class BaseTestCase(TestCase):
+    pass
+
+
 class PendingMigrationsTests(TestCase):
 
     def test_no_pending_migrations(self):
