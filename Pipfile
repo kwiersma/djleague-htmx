@@ -5,7 +5,7 @@ name = "pypi"
 
 [packages]
 black = "==24.8.0"
-django = "==5.1.6"
+django = "==5.1.7"
 django-health-check = "==3.18.3"
 environs = {extras = ["django"], version = "==11.0.0"}
 python-dateutil = "==2.9.0.post0"
