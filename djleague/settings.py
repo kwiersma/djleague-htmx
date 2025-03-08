@@ -37,8 +37,6 @@ INSTALLED_APPS = [
     "crispy_forms",
     "crispy_bootstrap5",
     "django_filters",
-    "rest_framework",
-    "drf_spectacular",
     "health_check",
     "health_check.db",
     "health_check.contrib.migrations",
@@ -210,16 +208,6 @@ SESSION_COOKIE_SECURE = env.bool("SESSION_COOKIE_SECURE", default=True)
 CSRF_COOKIE_SECURE = env.bool("SESSION_COOKIE_SECURE", default=True)
 if env.int("SECURE_HSTS_SECONDS", default=None):
     SECURE_HSTS_SECONDS = env.int("SECURE_HSTS_SECONDS", default=3600)
-
-# Django Rest Framework (DRF)
-REST_FRAMEWORK = {
-    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
-}
-
-# DRF Spectacular (Open API & Redoc)
-SPECTACULAR_SETTINGS = {
-    "SCHEMA_PATH_PREFIX_INSERT": "/api",
-}
 
 # django-filter settings
 FILTERS_EMPTY_CHOICE_LABEL = "Any"
