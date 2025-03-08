@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-black = "==24.8.0"
+black = "==25.1.0"
 django = "==5.1.7"
 django-health-check = "==3.18.3"
 environs = {extras = ["django"], version = "==11.0.0"}
