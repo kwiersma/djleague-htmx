@@ -13,7 +13,7 @@ python-dateutil = "==2.9.0.post0"
 sentry-sdk = "==2.19.1"
 django-crispy-forms = "==2.3"
 crispy-bootstrap5 = "==2024.10"
-factory-boy = "==3.3.1"
+factory-boy = "==3.3.3"
 django-debug-toolbar = "==5.0.1"
 django-filter = "==25.1"
 pyyaml = "==6.0.2"  # Used by django-rest-framework for schema generation
