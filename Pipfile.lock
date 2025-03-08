@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "bc6e47927d0a74fc618d8188edf121d12b52a025dadf0471bb9b7f571805b9de"
+            "sha256": "a433bfa7e9c76b32bfa0df35c011b59d3970c20618a0cad8e8f8321a97f8e1b1"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -319,12 +319,12 @@
         },
         "flake8-bugbear": {
             "hashes": [
-                "sha256:25bc3867f7338ee3b3e0916bf8b8a0b743f53a9a5175782ddc4325ed4f386b89",
-                "sha256:9b77627eceda28c51c27af94560a72b5b2c97c016651bdce45d8f56c180d2d32"
+                "sha256:1b6967436f65ca22a42e5373aaa6f2d87966ade9aa38d4baf2a1be550767545e",
+                "sha256:46273cef0a6b6ff48ca2d69e472f41420a42a46e24b2a8972e4f0d6733d12a64"
             ],
             "index": "pypi",
             "markers": "python_full_version >= '3.8.1'",
-            "version": "==24.8.19"
+            "version": "==24.12.12"
         },
         "gunicorn": {
             "hashes": [
