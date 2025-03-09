@@ -1,0 +1,41 @@
+{% load crispy_forms_tags %}
+
+<tr id="team_{{ form.instance.id }}">
+  {% csrf_token %}
+  <td>{{ form.draft_order|as_crispy_field }}</td>
+  <td>{{ form.name|as_crispy_field }}</td>
+  <td>{{ form.owner|as_crispy_field }}</td>
+  <td>
+    <button class="btn btn-primary"
+            hx-post="{% url 'team_edit' form.instance.id %}"
+            hx-include="closest tr"
+            hx-target="closest tr"
+            hx-swap="outerHTML">
+      Save Team
+    </button>
+    <button class="btn btn-danger"
+            hx-get="{% url 'team_row' form.instance.id %}"
+            hx-target="closest tr"
+            hx-swap="outerHTML">
+      Cancel
+    </button>
+  </td>
+</tr>
+
+<script>
+  document.body.setAttribute('hx-headers', '{"X-CSRFToken": "{{ csrf_token }}"}');
+</script>
+
+{% if messages %}
+  <div id="dj-messages" hx-swap-oob="true">
+    <div class="row justify-content-center p-4 p-lg-0">
+      <div class="col-sm-12 col-md-12">
+        <ul class="list-unstyled messages">
+          {% for message in messages %}
+            <li class="alert alert-{{ message.tags }}">{{ message|safe }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+{% endif %}

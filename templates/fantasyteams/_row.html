@@ -1,0 +1,16 @@
+{% load static %}
+
+<tr id="team_{{ team.id }}" hx-target="this" hx-swap="outerHTML">
+  <td>{{ team.draft_order }}</td>
+  <td><a href="{% url "team_edit" team.id %}">{{ team.name }}</a></td>
+  <td>{{ team.owner }}</td>
+  <td>
+    <button class="btn btn-primary"
+            hx-get="{% url 'team_edit' team.id %}"
+            hx-indicator="#htmx-indicator-{{ team.id }}">
+      Edit
+    </button>
+    <img id="htmx-indicator-{{ team.id }}" class="htmx-indicator"
+         src="{% static "images/spinner.gif" %}" alt="loading" />
+  </td>
+</tr>

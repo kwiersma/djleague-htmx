@@ -34,5 +34,9 @@ jobs:
       - name: Run black
         run: pipenv run black --check --verbose .
 
+        # The tests need some of the static files
+      - name: Run manage.py collectstatic
+        run: pipenv run ./manage.py collectstatic --noinput
+
       - name: Run tests
         run: pipenv run ./manage.py test --reverse --parallel

@@ -16,12 +16,7 @@
     <tbody>
     {% if teams %}
       {% for team in teams %}
-        <tr>
-          <td>{{ team.draft_order }}</td>
-          <td>{{ team.name }} ({{ team.id }})</td>
-          <td>{{ team.owner }}</td>
-          <td></td>
-        </tr>
+        {% include "fantasyteams/_row.html" %}
       {% endfor %}
     {% else %}
       <tr>
