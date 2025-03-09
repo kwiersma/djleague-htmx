@@ -32,8 +32,9 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item {% if request.resolver_match.url_name == 'draft' %}active{% endif %}">
-            <a class="nav-link" href="">Players</a>
+          <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'draft' %}active{% endif %}"
+               href="{% url 'draft' %}">Draft</a>
           </li>
           <li class="nav-item">
             <a class="nav-link {% if request.resolver_match.url_name == 'teams' %}active{% endif %}"

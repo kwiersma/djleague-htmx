@@ -1,0 +1,117 @@
+{% extends "_base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Draft{% endblock %}
+
+{% block content %}
+
+  <div class="row">
+    <div class="col-3">
+      <div class="row">
+
+        {# Draft order #}
+        <div class="list-group">
+          <div style="color: white; background-color: black;" class="list-group-item">
+            Round 1
+          </div>
+          {% for team in teams %}
+            <div class="list-group-item">
+              <span class="badge rounded-pill bg-primary">{{ team.draft_order }}.</span>
+              <span style="padding-left: 5px;">{{ team.name }} ({{ team.owner }})</span>
+            </div>
+          {% endfor %}
+        </div>
+
+        {# TODO: Team drafted players #}
+
+      </div>
+    </div>
+
+    <div class="col-9">
+      {# Players filter #}
+      <div class="row">
+        <div class="card">
+          <div class="card-body">
+
+            <form>
+              <div class="row">
+                <div class="col-md-3">
+                  {{ filter.form.lastname|as_crispy_field }}
+                </div>
+                <div class="col-md-3">
+                  {{ filter.form.position|as_crispy_field }}
+                </div>
+                <div class="col-md-6">
+                  {{ filter.form.status|as_crispy_field }}
+                </div>
+              </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+
+      {# Players table #}
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>Player</th>
+          <th>Rank</th>
+          <th>Pts</th>
+          <th>Bye</th>
+          <th>ADP</th>
+          <th>Pick #</th>
+          <th>Fantasy Team</th>
+        </tr>
+        </thead>
+        <tbody>
+          {% for player in players %}
+            <tr>
+              <td>{{ player.lastname }}, {{ player.firstname }}<br />
+                  <span style="font-size: 11px;">{{ player.team.abbrev }} - {{ player.position }}</span>
+              </td>
+              <td>{{ player.rank }}</td>
+              <td>{{ player.points }}</td>
+              <td>{{ player.team.byeweek }}</td>
+              <td>{{ player.avgPick }}</td>
+              <td>{% if player.pick %}
+                    {{ player.pick }}
+                  {% endif %}
+              </td>
+              <td>{% if player.fantasyteam %}
+                    {{ player.fantasyteam.name }} ({{ player.fantasyteam.owner }})
+                  {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      {% if pagination.has_other_pages %}
+        <div class="row mt-3 col-12 pagination text-right">
+          <div class="w-100">
+            <p style="font-weight: 500;color:#91393c;">
+              {% if pagination.has_previous %}
+                <a href="{{ filter.query_string }}&page={{ pagination.previous_page_number }}">
+                  <i class="fas fa-arrow-circle-left" style="color:#91393c8f;font-size:24px;margin-right:3px;"
+                     aria-hidden="true">&lt;</i>
+                </a>
+              {% endif %}
+              {% if pagination.has_previous or pagination.has_next %}
+                See More Players
+              {% endif %}
+              {% if pagination.has_next %}
+                <a href="{{ filter.query_string }}&page={{ pagination.next_page_number }}">
+                  <i class="fas fa-arrow-circle-right"
+                     style="color:#91393c8f;font-size:24px;margin-left:3px;">&gt;</i>
+                </a>
+              {% endif %}
+            </p>
+          </div>
+        </div>
+      {% endif %}
+
+    </div>
+  </div>
+
+{% endblock %}

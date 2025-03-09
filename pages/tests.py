@@ -118,3 +118,37 @@ class TestTeamEditView(BaseTestCase):
         message = list(resp.context.get("messages"))[0]
         self.assertEqual(message.tags, "warning")
         self.assertIn("Missing team information", message.message)
+
+
+class TestDraftView(BaseTestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.player = factories.Player()
+        cls.team = factories.FantasyTeamFactory()
+        cls.url = reverse("draft")
+
+    def test_view(self):
+        # Act
+        resp = self.client.get(self.url)
+
+        # Assert
+        self.assertEqual(resp.status_code, HTTPStatus.OK)
+        self.assertTemplateUsed(resp, "players/draft.html")
+        self.assertIn(self.player, resp.context_data["players"].object_list)
+        self.assertIn(self.team, resp.context_data["teams"])
+
+    def test_filter_position(self):
+        # Arrange
+        self.player.position = "QB"
+        self.player.save()
+        factories.Player(position="RB")
+
+        # Act
+        resp = self.client.get(self.url, data={"position": "QB"})
+
+        # Assert
+        self.assertEqual(resp.status_code, HTTPStatus.OK)
+        found_players = resp.context_data["players"].object_list
+        self.assertEqual(len(found_players), 1)
+        self.assertIn(self.player, found_players)

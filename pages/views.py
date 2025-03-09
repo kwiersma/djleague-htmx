@@ -1,12 +1,13 @@
 from django.contrib import messages
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import Http404, HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.views import generic
 from django.views.generic import TemplateView
 
-from djleague.models import FantasyTeam
-from pages.forms import FantasyTeamForm, FantasyTeamInlineForm
+from djleague.models import FantasyTeam, Player
+from pages.forms import FantasyTeamForm, FantasyTeamInlineForm, PlayersFilter
 
 
 class HomePageView(TemplateView):
@@ -76,3 +77,37 @@ class TeamRowView(TemplateView):
         except FantasyTeam.DoesNotExist:
             raise Http404()
         return self.render_to_response(dict(team=team))
+
+
+class DraftView(TemplateView):
+    template_name = "players/draft.html"
+
+    def get(self, request, *args, **kwargs):
+        f = PlayersFilter(
+            self.request.GET, queryset=Player.objects.select_related("team", "fantasyteam").order_by("rank")
+        )
+
+        paginator = Paginator(f.qs, 10)
+        page = self.request.GET.get("page", 1)
+        try:
+            paged_players = paginator.page(page)
+        except PageNotAnInteger:
+            paged_players = paginator.page(1)
+            page = 1
+        except EmptyPage:
+            paged_players = paginator.page(paginator.num_pages)
+        page = int(page)
+        pagination = dict()
+        pagination["has_other_pages"] = paginator.num_pages > 1
+        pagination["previous_page_number"] = page - 1
+        pagination["has_previous"] = page > 1
+        pagination["has_next"] = page < paginator.num_pages
+        pagination["next_page_number"] = page + 1
+        pagination["start_count"] = (paged_players.paginator.per_page * page) - 9
+        pagination["through_count"] = paged_players.paginator.per_page * page
+
+        teams = FantasyTeam.objects.order_by("draft_order")
+
+        return self.render_to_response(
+            dict(players=paged_players, teams=teams, pagination=pagination, filter=f)
+        )
