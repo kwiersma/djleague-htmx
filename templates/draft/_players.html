@@ -1,0 +1,86 @@
+{% load static %}
+
+<div id="players">
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>Player ({{ filter.form.data.sort }})</th>
+      <th>{% if not filter.form.data.sort or filter.form.data.sort == "rank" %}
+            Rank &downarrow;
+          {% else %}
+            <a href="#" onclick="sortClick('rank')">Rank</a>
+          {% endif %}
+      </th>
+      <th>{% if filter.form.data.sort == "-points" %}
+            Pts&downarrow;
+          {% else %}
+            <a href="#" onclick="sortClick('-points')">Pts</a>
+          {% endif %}
+      </th>
+      <th>Bye</th>
+      <th>ADP</th>
+      <th>Pick #</th>
+      <th>Fantasy Team</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for player in players %}
+      <tr>
+        <td>
+          {{ player.lastname }}, {{ player.firstname }}<br/>
+          <span style="font-size: 11px;">{{ player.team.abbrev }} - {{ player.position }}</span>
+        </td>
+        <td>{{ player.rank }}</td>
+        <td>{{ player.points }}</td>
+        <td>{{ player.team.byeweek }}</td>
+        <td>{{ player.avgPick }}</td>
+        <td>
+          {% if player.pick %}
+            {{ player.pick }}
+          {% endif %}
+        </td>
+        <td>
+          {% if player.fantasyteam %}
+            {{ player.fantasyteam.name }} ({{ player.fantasyteam.owner }})
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  {% if pagination.has_other_pages %}
+    <div class="row mt-3 col-12 pagination text-right">
+      <div class="w-100">
+        <p>
+          {% if pagination.has_previous %}
+            <button type="submit" name="page" form="players-search"
+                    class="btn btn-secondary"
+                    value="{{ pagination.previous_page_number }}">
+              &lt;
+            </button>
+          {% endif %}
+          {% if pagination.has_previous or pagination.has_next %}
+            See More Players
+          {% endif %}
+          {% if pagination.has_next %}
+            <button type="submit" name="page" form="players-search"
+                    class="btn btn-secondary"
+                    value="{{ pagination.next_page_number }}">
+              &gt;
+            </button>
+          {% endif %}
+        </p>
+      </div>
+    </div>
+  {% endif %}
+</div>
+
+<script>
+  function sortClick(fieldname) {
+    document.querySelector('#id_sort').value = fieldname;
+    console.log("id_sort value is now", document.querySelector('#id_sort').value);
+    document.querySelector('#players-search').submit();
+    //htmx.process(document.querySelector('#players-search'));
+  }
+</script>

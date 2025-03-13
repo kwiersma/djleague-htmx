@@ -1,5 +1,6 @@
 import django_filters
 from django import forms
+from django.db.models import Q
 
 from djleague.models import FantasyTeam, Player
 
@@ -24,7 +25,9 @@ class FantasyTeamInlineForm(forms.ModelForm):
 class PlayersFilter(django_filters.FilterSet):
     status = django_filters.ChoiceFilter(
         label="Status",
+        method="status_filter",
         choices=[("0", "Available"), ("1", "Drafted")],
+        widget=forms.Select(attrs={"hx-post": "/draft", "hx-target": "#players"}),
     )
     position = django_filters.ChoiceFilter(
         label="Position",
@@ -37,8 +40,14 @@ class PlayersFilter(django_filters.FilterSet):
             ("K", "K"),
             ("DEF", "DEF"),
         ],
+        widget=forms.Select(attrs={"hx-post": "/draft", "hx-target": "#players"}),
     )
-    lastname = django_filters.CharFilter(label="Last Name", field_name="lastname", lookup_expr="istartswith")
+    lastname = django_filters.CharFilter(
+        label="Last Name",
+        field_name="lastname",
+        lookup_expr="istartswith",
+        widget=forms.TextInput(attrs={"autofocus": "autofocus"}),
+    )
 
     sort = django_filters.OrderingFilter(
         fields=(
@@ -47,15 +56,29 @@ class PlayersFilter(django_filters.FilterSet):
             ("points", "points"),
             ("lastname", "lastname"),
         ),
+        choices=[
+            ("rank", "rank"),
+            ("adp", "avgPick"),
+            ("-points", "points"),
+            ("lastname", "lastname"),
+        ],
     )
 
     class Meta:
         model = Player
         fields = ("lastname",)
 
+    def status_filter(self, queryset, name, value):
+        if value:
+            if value == "0":
+                return queryset.filter(fantasyteam_id=None)
+            elif value == "1":
+                return queryset.filter(~Q(fantasyteam_id=None))
+        return queryset
+
     def query_string(self) -> str:
         qstring = "?d=1"
-        fields = ["lastname", "position", "status"]
+        fields = ["lastname", "position", "status", "sort"]
         for fieldname in fields:
             if self.data.get(fieldname) and self.data.get(fieldname) != "None":
                 qstring += f"&{fieldname}={self.data.get(fieldname)}"

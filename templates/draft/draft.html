@@ -1,0 +1,71 @@
+{% extends "_base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Draft{% endblock %}
+
+{% block content %}
+
+  <div class="row">
+    <div class="col-3">
+      <div class="row">
+
+        {# Draft order #}
+        <div class="list-group">
+          <div style="color: white; background-color: black;" class="list-group-item">
+            Round 1
+          </div>
+          {% for team in teams %}
+            <div class="list-group-item">
+              <span class="badge rounded-pill bg-primary">{{ team.draft_order }}.</span>
+              <span style="padding-left: 5px;">{{ team.name }} ({{ team.owner }})</span>
+            </div>
+          {% endfor %}
+        </div>
+
+        {# TODO: Team drafted players #}
+
+      </div>
+    </div>
+
+    <div class="col-9">
+      {# Players filter #}
+      <div class="row">
+        <div class="card">
+          <div class="card-body">
+
+            <form id="players-search" method="post"
+                  hx-post="{% url 'draft' %}" hx-target="#players">
+              {% csrf_token %}
+              <input type="hidden" name="sort" id="id_sort" value="{{ filter.form.data.sort }}" />
+              <div class="row">
+                <div class="col-md-3">
+                  <div id="div_id_lastname" class="mb-3">
+                    <label for="id_lastname" class="form-label">
+                      Last Name
+                    </label>
+                    <input type="text" name="lastname" autofocus class="textinput form-control" id="id_lastname"
+                           value="{{ filter.form.lastname.value|default_if_none:'' }}"
+                           hx-post="{% url 'draft' %}" hx-target="#players"
+                           hx-trigger="keyup changed delay:200ms" />
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  {{ filter.form.position|as_crispy_field }}
+                </div>
+                <div class="col-md-6">
+                  {{ filter.form.status|as_crispy_field }}
+                </div>
+              </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+
+      {# Players table #}
+      {% include "draft/_players.html" %}
+
+    </div>
+  </div>
+
+{% endblock %}

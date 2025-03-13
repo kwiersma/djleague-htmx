@@ -1,12 +1,12 @@
 {% load crispy_forms_tags %}
 
-<tr id="team_{{ form.instance.id }}">
+<tr id="team_{{ form.instance.id }}" hx-disabled-elt="#save_{{ form.instance.id }}">
   {% csrf_token %}
   <td>{{ form.draft_order|as_crispy_field }}</td>
   <td>{{ form.name|as_crispy_field }}</td>
   <td>{{ form.owner|as_crispy_field }}</td>
   <td>
-    <button class="btn btn-primary"
+    <button class="btn btn-primary" id="save_{{ form.instance.id }}"
             hx-post="{% url 'team_edit' form.instance.id %}"
             hx-include="closest tr"
             hx-target="closest tr"
