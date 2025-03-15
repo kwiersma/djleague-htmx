@@ -145,7 +145,7 @@ class TestDraftView(BaseTestCase):
         factories.Player(position="RB")
 
         # Act
-        resp = self.client.post(self.url, data={"position": "QB"})
+        resp = self.client.get(self.url, data={"position": "QB"})
 
         # Assert
         self.assertEqual(resp.status_code, HTTPStatus.OK)
@@ -153,34 +153,27 @@ class TestDraftView(BaseTestCase):
         self.assertEqual(len(found_players), 1)
         self.assertIn(self.player, found_players)
 
-
-class TestDraftSearchView(BaseTestCase):
-
-    @classmethod
-    def setUpTestData(cls):
-        cls.player = factories.Player()
-        cls.url = reverse("draft")
-
     def test_htmx_view(self):
         # Act
-        resp = self.client.post(self.url)
+        resp = self.client.get(self.url, headers={"HX-Request": "true"})
 
         # Assert
         self.assertEqual(resp.status_code, HTTPStatus.OK)
-        self.assertTemplateUsed(resp, "draft/_players.html")
+        self.assertEqual(resp.template_name, ["draft/_players.html"])
         self.assertIn(self.player, resp.context_data["players"].object_list)
 
-    def test_position_filter(self):
+    def test_htmx_position_filter(self):
         # Arrange
         self.player.position = "QB"
         self.player.save()
         factories.Player(position="RB")
 
         # Act
-        resp = self.client.post(self.url, data={"position": "QB"})
+        resp = self.client.get(self.url, data={"position": "QB"}, headers={"HX-Request": "true"})
 
         # Assert
         self.assertEqual(resp.status_code, HTTPStatus.OK)
+        self.assertEqual(resp.template_name, ["draft/_players.html"])
         found_players = resp.context_data["players"].object_list
         self.assertEqual(len(found_players), 1)
         self.assertIn(self.player, found_players)

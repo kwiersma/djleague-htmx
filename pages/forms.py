@@ -27,7 +27,7 @@ class PlayersFilter(django_filters.FilterSet):
         label="Status",
         method="status_filter",
         choices=[("0", "Available"), ("1", "Drafted")],
-        widget=forms.Select(attrs={"hx-post": "/draft", "hx-target": "#players"}),
+        widget=forms.Select(attrs={"form": "players-search"}),
     )
     position = django_filters.ChoiceFilter(
         label="Position",
@@ -40,13 +40,13 @@ class PlayersFilter(django_filters.FilterSet):
             ("K", "K"),
             ("DEF", "DEF"),
         ],
-        widget=forms.Select(attrs={"hx-post": "/draft", "hx-target": "#players"}),
+        widget=forms.Select(attrs={"form": "players-search"}),
     )
     lastname = django_filters.CharFilter(
         label="Last Name",
         field_name="lastname",
         lookup_expr="istartswith",
-        widget=forms.TextInput(attrs={"autofocus": "autofocus"}),
+        widget=forms.TextInput(attrs={"autofocus": "autofocus", "form": "players-search"}),
     )
 
     sort = django_filters.OrderingFilter(

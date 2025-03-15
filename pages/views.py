@@ -83,12 +83,12 @@ class DraftBaseView(TemplateView):
 
     def _build_search_context(self) -> dict:
         initial = QueryDict("", mutable=True)
-        initial.update(self.request.POST)
+        initial.update(self.request.GET)
         if not initial.get("sort"):
             initial["sort"] = "rank"
         f = PlayersFilter(initial, queryset=Player.objects.select_related("team", "fantasyteam"))
         paginator = Paginator(f.qs, 10)
-        page = self.request.POST.get("page", 1)
+        page = self.request.GET.get("page", 1)
         try:
             paged_players = paginator.page(page)
         except PageNotAnInteger:
@@ -115,15 +115,6 @@ class DraftView(DraftBaseView):
     template_name = "draft/draft.html"
 
     def get(self, request, *args, **kwargs):
-        context = self._build_search_context()
-        context["teams"] = FantasyTeam.objects.order_by("draft_order")
-
-        if request.headers.get("HX-Request"):
-            self.template_name = "draft/_players.html"
-
-        return self.render_to_response(context)
-
-    def post(self, request, *args, **kwargs):
         context = self._build_search_context()
         context["teams"] = FantasyTeam.objects.order_by("draft_order")
 

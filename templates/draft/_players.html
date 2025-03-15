@@ -1,21 +1,34 @@
 {% load static %}
 
 <div id="players">
+  <input type="hidden" form="players-search" name="sort" id="id_sort" value="{{ filter.form.data.sort }}" />
   <table class="table table-striped">
     <thead>
     <tr>
-      <th>Player ({{ filter.form.data.sort }})</th>
-      <th>{% if not filter.form.data.sort or filter.form.data.sort == "rank" %}
-            Rank &downarrow;
-          {% else %}
-            <a href="#" onclick="sortClick('rank')">Rank</a>
-          {% endif %}
+      <th>Player</th>
+      <th>
+        {% if not filter.form.data.sort or filter.form.data.sort == "rank" %}
+          Rank&downarrow;
+        {% else %}
+          <a href="{{ filter.query_string }}&sort=rank"
+             hx-get="{{ filter.query_string }}&sort=rank"
+             hx-target="#players"
+             hx-push-url="true">
+            Rank
+          </a>
+        {% endif %}
       </th>
-      <th>{% if filter.form.data.sort == "-points" %}
-            Pts&downarrow;
-          {% else %}
-            <a href="#" onclick="sortClick('-points')">Pts</a>
-          {% endif %}
+      <th>
+        {% if filter.form.data.sort == "-points" %}
+          Pts&downarrow;
+        {% else %}
+          <a href="{{ filter.query_string }}&sort=-points"
+             hx-get="{{ filter.query_string }}&sort=-points"
+             hx-target="#players"
+             hx-push-url="true">
+            Pts
+          </a>
+        {% endif %}
       </th>
       <th>Bye</th>
       <th>ADP</th>
@@ -54,33 +67,28 @@
       <div class="w-100">
         <p>
           {% if pagination.has_previous %}
-            <button type="submit" name="page" form="players-search"
-                    class="btn btn-secondary"
-                    value="{{ pagination.previous_page_number }}">
+            <a class="btn btn-secondary"
+               href="{{ filter.query_string }}&page={{ pagination.previous_page_number }}"
+               hx-get="{{ filter.query_string }}&page={{ pagination.previous_page_number }}"
+               hx-target="#players"
+               hx-push-url="true">
               &lt;
-            </button>
+            </a>
           {% endif %}
           {% if pagination.has_previous or pagination.has_next %}
             See More Players
           {% endif %}
           {% if pagination.has_next %}
-            <button type="submit" name="page" form="players-search"
-                    class="btn btn-secondary"
-                    value="{{ pagination.next_page_number }}">
+            <a class="btn btn-secondary"
+               href="{{ filter.query_string }}&page={{ pagination.next_page_number }}"
+               hx-get="{{ filter.query_string }}&page={{ pagination.next_page_number }}"
+               hx-target="#players"
+               hx-push-url="true">
               &gt;
-            </button>
+            </a>
           {% endif %}
         </p>
       </div>
     </div>
   {% endif %}
 </div>
-
-<script>
-  function sortClick(fieldname) {
-    document.querySelector('#id_sort').value = fieldname;
-    console.log("id_sort value is now", document.querySelector('#id_sort').value);
-    document.querySelector('#players-search').submit();
-    //htmx.process(document.querySelector('#players-search'));
-  }
-</script>

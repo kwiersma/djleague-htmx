@@ -33,10 +33,10 @@
         <div class="card">
           <div class="card-body">
 
-            <form id="players-search" method="post"
-                  hx-post="{% url 'draft' %}" hx-target="#players">
-              {% csrf_token %}
-              <input type="hidden" name="sort" id="id_sort" value="{{ filter.form.data.sort }}" />
+            <form id="players-search" action="" method="get"
+                  hx-trigger="submit, input from:[form=players-search] delay:200ms"
+                  hx-push-url="true"
+                  hx-get="{% url 'draft' %}" hx-target="#players">
               <div class="row">
                 <div class="col-md-3">
                   <div id="div_id_lastname" class="mb-3">
@@ -44,9 +44,8 @@
                       Last Name
                     </label>
                     <input type="text" name="lastname" autofocus class="textinput form-control" id="id_lastname"
-                           value="{{ filter.form.lastname.value|default_if_none:'' }}"
-                           hx-post="{% url 'draft' %}" hx-target="#players"
-                           hx-trigger="keyup changed delay:200ms" />
+                           form="players-search"
+                           value="{{ filter.form.lastname.value|default_if_none:'' }}" />
                   </div>
                 </div>
                 <div class="col-md-3">
