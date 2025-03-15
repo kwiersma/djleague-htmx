@@ -1,0 +1,21 @@
+<table id="team-players" class="table table-striped">
+  <tr>
+    <th>Player</th>
+    <th>Pos</th>
+    <th>Bye</th>
+  </tr>
+  {% for player in team_players %}
+    <tr>
+      <td>
+        {{ player.lastname }}, {{ player.firstname }}<br/>
+        <span style="font-size: 11px;">(R {{ player.round }}, P {{ player.pick }})</span>
+      </td>
+      <td>{{ player.position }}</td>
+      <td>{{ player.team.byeweek }}</td>
+    </tr>
+  {% empty %}
+    <tr>
+      <td colspan="3">No players drafted</td>
+    </tr>
+  {% endfor %}
+</table>

@@ -177,3 +177,35 @@ class TestDraftView(BaseTestCase):
         found_players = resp.context_data["players"].object_list
         self.assertEqual(len(found_players), 1)
         self.assertIn(self.player, found_players)
+
+
+class TestTeamPlayersView(BaseTestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.team = factories.FantasyTeamFactory(draft_order=1)
+        cls.player = factories.Player(fantasyteam=cls.team, round=1, pick=1)
+        cls.url = reverse("team_players")
+
+    def test_htmx_view(self):
+        # Act
+        resp = self.client.get(self.url, data=dict(fantasyteam=self.team.id))
+
+        # Assert
+        self.assertEqual(resp.status_code, HTTPStatus.OK)
+        self.assertEqual(resp.template_name, ["draft/_team-players.html"])
+        self.assertEqual(resp.context_data["current_team_id"], self.team.id)
+        self.assertIn(self.player, resp.context_data["team_players"])
+
+    def test_htmx_no_team_id(self):
+        # Arrange
+        extra_team = factories.FantasyTeamFactory(draft_order=2)
+
+        # Act
+        resp = self.client.get(self.url)
+
+        # Assert
+        self.assertEqual(resp.status_code, HTTPStatus.OK)
+        self.assertEqual(resp.template_name, ["draft/_team-players.html"])
+        self.assertEqual(resp.context_data["current_team_id"], self.team.id)
+        self.assertIn(self.player, resp.context_data["team_players"])

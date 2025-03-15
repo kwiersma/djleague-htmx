@@ -110,15 +110,40 @@ class DraftBaseView(TemplateView):
 
         return context
 
+    def _build_team_players_context(self, context: dict | None = None) -> dict:
+        if not context:
+            context = dict()
+        context["teams"] = FantasyTeam.objects.order_by("draft_order")
+        current_team_id = self.request.GET.get("fantasyteam")
+        if not current_team_id:
+            current_team_id = context["teams"][0].id
+        else:
+            current_team_id = int(current_team_id)
+        context["current_team_id"] = current_team_id
+        context["team_players"] = (
+            Player.objects.filter(fantasyteam_id=current_team_id)
+            .select_related("team")
+            .order_by("pick", "round")
+        )
+        return context
+
 
 class DraftView(DraftBaseView):
     template_name = "draft/draft.html"
 
     def get(self, request, *args, **kwargs):
         context = self._build_search_context()
-        context["teams"] = FantasyTeam.objects.order_by("draft_order")
+        context = self._build_team_players_context(context)
 
         if request.headers.get("HX-Request"):
             self.template_name = "draft/_players.html"
 
+        return self.render_to_response(context)
+
+
+class TeamPlayersView(DraftBaseView):
+    template_name = "draft/_team-players.html"
+
+    def get(self, request, *args, **kwargs):
+        context = self._build_team_players_context()
         return self.render_to_response(context)
