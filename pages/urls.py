@@ -1,6 +1,14 @@
 from django.urls import path
 
-from .views import HomePageView, TeamsView, TeamEditView, TeamRowView, DraftView, TeamPlayersView
+from .views import (
+    HomePageView,
+    TeamsView,
+    TeamEditView,
+    TeamRowView,
+    DraftView,
+    TeamPlayersView,
+    DraftPlayerView,
+)
 
 urlpatterns = [
     path("", HomePageView.as_view(), name="home"),
@@ -9,4 +17,5 @@ urlpatterns = [
     path("teams/<int:id>/row", TeamRowView.as_view(), name="team_row"),
     path("draft", DraftView.as_view(), name="draft"),
     path("draft/team-players", TeamPlayersView.as_view(), name="team_players"),
+    path("draft/players/<int:id>/draft", DraftPlayerView.as_view(), name="draft_player"),
 ]

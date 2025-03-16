@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib import messages
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import Http404, HttpResponse, QueryDict
@@ -7,7 +9,7 @@ from django.views import generic
 from django.views.generic import TemplateView
 
 from djleague.models import FantasyTeam, Player
-from pages.forms import FantasyTeamForm, FantasyTeamInlineForm, PlayersFilter
+from pages.forms import FantasyTeamForm, FantasyTeamInlineForm, PlayersFilter, DraftPlayerForm
 
 
 class HomePageView(TemplateView):
@@ -123,7 +125,7 @@ class DraftBaseView(TemplateView):
         context["team_players"] = (
             Player.objects.filter(fantasyteam_id=current_team_id)
             .select_related("team")
-            .order_by("pick", "round")
+            .order_by("round", "pick")
         )
         return context
 
@@ -147,3 +149,46 @@ class TeamPlayersView(DraftBaseView):
     def get(self, request, *args, **kwargs):
         context = self._build_team_players_context()
         return self.render_to_response(context)
+
+
+class DraftPlayerView(TemplateView):
+    template_name = "draft/_draft-player.html"
+
+    def get(self, request, *args, **kwargs):
+        context = self._build_context(kwargs)
+        initial = dict(fantasyteam=context["current_fantasyteam_id"])
+
+        form = DraftPlayerForm(initial, instance=context["player"])
+        context["form"] = form
+
+        return self.render_to_response(context)
+
+    def post(self, request, *args, **kwargs):
+        context = self._build_context(kwargs)
+
+        form = DraftPlayerForm(request.POST, instance=context["player"])
+        context["form"] = form
+        if form.is_valid():
+            player = form.instance
+            player.round = context["round"]
+            player.pick = context["pick"]
+            player.picktime = datetime.now()
+            player.save()
+            return HttpResponse(headers={"HX-Trigger": "player-drafted"})
+        else:
+            return self.render_to_response(context)
+
+    def _build_context(self, kwargs) -> dict:
+        if not kwargs.get("id"):
+            raise Http404()
+        try:
+            player = Player.objects.get(pk=kwargs.get("id"))
+        except Player.DoesNotExist:
+            raise Http404()
+        picks = Player.objects.fetch_last_picks()
+        round = picks[0]["round"]
+        pick = picks[0]["pick"]
+        context = dict(
+            pick=pick, player=player, round=round, current_fantasyteam_id=picks[0]["fantasyteam_id"]
+        )
+        return context

@@ -3,7 +3,7 @@ from http import HTTPStatus
 from django.urls import reverse
 
 from djleague import factories
-from djleague.models import FantasyTeam
+from djleague.models import FantasyTeam, Player
 from djleague.tests import BaseTestCase
 
 
@@ -209,3 +209,40 @@ class TestTeamPlayersView(BaseTestCase):
         self.assertEqual(resp.template_name, ["draft/_team-players.html"])
         self.assertEqual(resp.context_data["current_team_id"], self.team.id)
         self.assertIn(self.player, resp.context_data["team_players"])
+
+
+class TestDraftPlayerView(BaseTestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.team = factories.FantasyTeamFactory(draft_order=1)
+        cls.player = factories.Player()
+        cls.url = reverse("draft_player", kwargs=dict(id=cls.player.id))
+
+    def test_htmx_view(self):
+        # Act
+        resp = self.client.get(self.url, headers={"HX-Request": "true"})
+
+        # Assert
+        self.assertEqual(resp.status_code, HTTPStatus.OK)
+        self.assertEqual(resp.template_name, ["draft/_draft-player.html"])
+        self.assertEqual(resp.context_data["current_fantasyteam_id"], self.team.id)
+        self.assertEqual(resp.context_data["player"].id, self.player.id)
+        self.assertEqual(resp.context_data["round"], 1)
+        self.assertEqual(resp.context_data["pick"], 1)
+
+    def test_htmx_post(self):
+        # Arrange
+        data = dict(fantasyteam=self.team.id)
+
+        # Act
+        resp = self.client.post(self.url, data=data, headers={"HX-Request": "true"})
+
+        # Assert
+        self.assertEqual(resp.status_code, HTTPStatus.OK)
+        self.assertEqual(resp.headers.get("HX-Trigger"), "player-drafted")
+
+        player = Player.objects.get(pk=self.player.id)
+        self.assertEqual(player.fantasyteam, self.team)
+        self.assertEqual(player.pick, 1)
+        self.assertEqual(player.round, 1)

@@ -26,7 +26,8 @@
         <div class="card">
           <div class="card-header">
             <select name="fantasyteam" class="form-select"
-              hx-get="{% url "team_players" %}" hx-target="#team-players">
+              hx-get="{% url "team_players" %}" hx-target="#team-players"
+              hx-trigger="change, player-drafted from:body">
               {% for team in teams %}
                 <option value="{{ team.id }}"
                   {% if current_team_id == team.id %} selected{% endif %}>
@@ -50,7 +51,7 @@
           <div class="card-body">
 
             <form id="players-search" action="" method="get"
-                  hx-trigger="submit, input from:[form=players-search] delay:200ms"
+                  hx-trigger="submit, player-drafted from:body, input from:[form=players-search] delay:200ms"
                   hx-push-url="true"
                   hx-get="{% url 'draft' %}" hx-target="#players">
               <div class="row">
@@ -84,4 +85,26 @@
     </div>
   </div>
 
+  <div id="modals-here"></div>
+
+{% endblock %}
+
+{% block javascript %}
+  {{ block.super }}
+  <script type="application/javascript">
+    {# From: https://htmx.org/examples/modal-bootstrap/ #}
+    function closeModal() {
+      let container = document.getElementById("modals-here");
+      let backdrop = document.getElementById("modal-backdrop");
+      let modal = document.getElementById("modal");
+
+      modal.classList.remove("show");
+      backdrop.classList.remove("show");
+
+      setTimeout(function () {
+        container.removeChild(backdrop);
+        container.removeChild(modal);
+      }, 200)
+    }
+  </script>
 {% endblock %}

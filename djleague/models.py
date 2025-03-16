@@ -42,8 +42,9 @@ class FantasyTeam(models.Model):
 
 
 class PlayerManager(models.Manager):
-    def fetch_last_picks(self):
+    def fetch_last_picks(self) -> dict:
         fantasyTeams = FantasyTeam.objects.order_by("draft_order")
+        first_team = fantasyTeams[0]
         jsonPicks = []
         lastPicks = Player.objects.exclude(round=None).exclude(pick=None).order_by("-round", "-pick")[:2]
 
@@ -83,8 +84,8 @@ class PlayerManager(models.Manager):
                             nextTeam2 = team
         jsonPicks.append(
             {
-                "fantasyTeam": nextTeam.name if nextTeam else "",
-                "fantasyteam_id": nextTeam.id if nextTeam else "",
+                "fantasyTeam": nextTeam.name if nextTeam else first_team.name,
+                "fantasyteam_id": nextTeam.id if nextTeam else first_team.id,
                 "owner": nextTeam.owner if nextTeam else "",
                 "round": thisRound,
                 "pick": thisPick,

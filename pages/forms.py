@@ -83,3 +83,13 @@ class PlayersFilter(django_filters.FilterSet):
             if self.data.get(fieldname) and self.data.get(fieldname) != "None":
                 qstring += f"&{fieldname}={self.data.get(fieldname)}"
         return qstring
+
+
+class DraftPlayerForm(forms.ModelForm):
+    fantasyteam = forms.ModelChoiceField(
+        label="Team", required=True, queryset=FantasyTeam.objects.order_by("draft_order")
+    )
+
+    class Meta:
+        model = Player
+        fields = ("fantasyteam",)

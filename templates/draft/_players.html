@@ -49,12 +49,19 @@
         <td>{{ player.avgPick }}</td>
         <td>
           {% if player.pick %}
-            {{ player.pick }}
+            {{ player.pickNo }}
           {% endif %}
         </td>
         <td>
           {% if player.fantasyteam %}
             {{ player.fantasyteam.name }} ({{ player.fantasyteam.owner }})
+          {% else  %}
+            <a class="btn btn-primary"
+               hx-get="{% url 'draft_player' player.id %}"
+               hx-target="#modals-here"
+               hx-trigger="click"
+               _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop"
+            >Draft</a>
           {% endif %}
         </td>
       </tr>
