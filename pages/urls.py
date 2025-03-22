@@ -9,6 +9,7 @@ from .views import (
     TeamPlayersView,
     DraftPlayerView,
     LastPicksView,
+    UpcomingPicksView,
 )
 
 urlpatterns = [
@@ -20,4 +21,5 @@ urlpatterns = [
     path("draft/team-players", TeamPlayersView.as_view(), name="team_players"),
     path("draft/players/<int:id>/draft", DraftPlayerView.as_view(), name="draft_player"),
     path("draft/last-picks", LastPicksView.as_view(), name="last_picks"),
+    path("draft/upcoming-picks", UpcomingPicksView.as_view(), name="upcoming_picks"),
 ]

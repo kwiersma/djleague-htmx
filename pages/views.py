@@ -2,6 +2,7 @@ from datetime import datetime
 
 from django.contrib import messages
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.db.models import QuerySet
 from django.http import Http404, HttpResponse, QueryDict
 from django.shortcuts import redirect
 from django.urls import reverse
@@ -212,3 +213,93 @@ class LastPicksView(DraftBaseView):
     def get(self, request, *args, **kwargs):
         context = self._build_last_picks_context()
         return self.render_to_response(context)
+
+
+class PickRow:
+    def __init__(self):
+        self.row_type = ""
+        self.name = ""
+        self.round_pick = 0
+        self.pick_no = 0
+        self.item_class = ""
+        self.label_class = ""
+
+
+class UpcomingPicksView(DraftBaseView):
+    template_name = "draft/_upcoming_picks.html"
+
+    def get(self, request, *args, **kwargs):
+        teams = FantasyTeam.objects.order_by("draft_order")
+        picks = Player.objects.fetch_last_picks()
+        rows = self._setup_pick_rows(teams, picks)
+
+        for idx, row in enumerate(rows):
+            itemClass = ""
+            labelClass = "primary"
+            if row.row_type != "round":
+                if idx == 1:
+                    itemClass = "danger"
+                    labelClass = "danger"
+                elif idx == 2:
+                    itemClass = "warning"
+                    labelClass = "warning"
+            row.item_class = itemClass
+            row.label_class = labelClass
+
+        context = dict(teams=teams, rows=rows)
+        return self.render_to_response(context)
+
+    def _setup_pick_rows(self, teams: QuerySet[FantasyTeam], picks: list[dict]) -> list[PickRow]:
+        current_round = 0
+        current_pick = 1
+
+        if picks and len(picks) > 0:
+            current_round = picks[0].get("round")
+            current_pick = picks[0].get("pick")
+
+        pick_rows = []
+
+        if teams is None:
+            teams = []
+
+        if len(teams) > 0 and current_round > 0:
+            pick_rows = self._generate_rows_by_round(current_round, current_pick, teams, pick_rows)
+            if len(pick_rows) < 13:
+                pick_rows = self._generate_rows_by_round(current_round + 1, 1, teams, pick_rows)
+
+        return pick_rows
+
+    def _generate_rows_by_round(
+        self, start_round: int, start_round_pick: int, teams: QuerySet[FantasyTeam], pick_rows: list[PickRow]
+    ) -> list[PickRow]:
+        is_odd_round = start_round % 2 == 1 or start_round == 0
+
+        pick_row = PickRow()
+        pick_row.row_type = "round"
+        pick_row.name = "Round " + str(start_round)
+        pick_rows.append(pick_row)
+
+        i = 0
+        if is_odd_round:
+            i = start_round_pick - 1
+        else:
+            i = len(teams) - start_round_pick
+
+        picks_added = 1
+        while i < len(teams) and i >= 0 and len(pick_rows) < 13:
+            team = teams[i]
+            pick_row = PickRow()
+            pick_row.row_type = "team"
+            pick_row.name = team.name + " (" + team.owner + ")"
+            pick_row.round_pick = start_round_pick + picks_added
+            # Round 0 is keepers which don't have a pick no
+            pick_row.pick_no = (start_round - 1) * 10 + (pick_row.round_pick - 1)
+            pick_rows.append(pick_row)
+            picks_added += 1
+
+            if is_odd_round:
+                i += 1
+            else:
+                i -= 1
+
+        return pick_rows

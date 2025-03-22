@@ -6,6 +6,7 @@ from django.urls import reverse
 from djleague import factories
 from djleague.models import FantasyTeam, Player
 from djleague.tests import BaseTestCase
+from pages.views import PickRow
 
 
 class TestHome(BaseTestCase):
@@ -288,3 +289,44 @@ class TestLastPicksView(BaseTestCase):
         self.assertEqual(resp.context_data["last_pick"]["round"], 1)
         self.assertEqual(resp.context_data["last_pick"]["pick"], 1)
         self.assertEqual(resp.context_data["on_deck"]["owner"], self.team3.owner)
+
+
+class TestUpcomingPicksView(BaseTestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.team1 = factories.FantasyTeamFactory(draft_order=1)
+        cls.team2 = factories.FantasyTeamFactory(draft_order=2)
+        cls.team3 = factories.FantasyTeamFactory(draft_order=3)
+        cls.url = reverse("upcoming_picks")
+
+    def test_no_picks(self):
+        # Act
+        resp = self.client.get(self.url, headers={"HX-Request": "true"})
+
+        # Assert
+        self.assertEqual(resp.status_code, HTTPStatus.OK)
+        self.assertEqual(resp.template_name, ["draft/_upcoming_picks.html"])
+        self.assertEqual(len(resp.context_data["rows"]), 8)
+
+        row1: PickRow = resp.context_data["rows"][0]
+        self.assertEqual(row1.row_type, "round")
+        self.assertEqual(row1.name, "Round 1")
+
+        row2: PickRow = resp.context_data["rows"][1]
+        self.assertEqual(row2.row_type, "team")
+        self.assertEqual(row2.name, f"{self.team1.name} ({self.team1.owner})")
+        self.assertEqual(row2.item_class, "danger")
+        self.assertEqual(row2.pick_no, 1)
+
+        row3: PickRow = resp.context_data["rows"][2]
+        self.assertEqual(row3.row_type, "team")
+        self.assertEqual(row3.name, f"{self.team2.name} ({self.team2.owner})")
+        self.assertEqual(row3.item_class, "warning")
+        self.assertEqual(row3.pick_no, 2)
+
+        row4: PickRow = resp.context_data["rows"][3]
+        self.assertEqual(row4.row_type, "team")
+        self.assertEqual(row4.name, f"{self.team3.name} ({self.team3.owner})")
+        self.assertEqual(row4.item_class, "")
+        self.assertEqual(row4.pick_no, 3)

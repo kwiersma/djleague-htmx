@@ -1,0 +1,16 @@
+<div id="upcoming-picks" class="list-group">
+  {% for row in rows %}
+    {% if row.row_type == "round" %}
+      <div style="color: white; background-color: black;" class="list-group-item">
+        {{ row.name }}
+      </div>
+    {% else %}
+      <div class="list-group-item list-group-item-{{ row.item_class }}" style="{{ row.item_style }}">
+        <span class="badge rounded-pill bg-{{ row.label_class }}">
+          {{ row.pick_no }}.
+        </span>
+        <span style="padding-left: 5px">{{ row.name }}</span>
+      </div>
+    {% endif %}
+  {% endfor %}
+</div>
