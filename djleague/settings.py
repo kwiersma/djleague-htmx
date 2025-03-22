@@ -217,6 +217,13 @@ TEST_RUNNER = "xmlrunner.extra.djangotestrunner.XMLTestRunner"
 TEST_OUTPUT_DIR = "./test-results"
 TEST_OUTPUT_FILE_NAME = "results.xml"
 
+# Pusher
+# https://pusher.com/docs/channels/server_api/overview/
+PUSHER_APP_ID = env.str("PUSHER_APP_ID", default="")
+PUSHER_SECRET = env.str("PUSHER_SECRET", default="")
+PUSHER_KEY = env.str("PUSHER_KEY", default="")
+PUSHER_CLUSTER = env.str("PUSHER_CLUSTER", default="")
+
 # Sentry.io
 SENTRY_ENABLED = env.bool("SENTRY_ENABLED", default=False)
 if SENTRY_ENABLED and not TESTING:

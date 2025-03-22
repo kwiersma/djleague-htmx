@@ -92,6 +92,24 @@
 {% block javascript %}
   {{ block.super }}
   <script type="application/javascript">
+    {# Pusher config #}
+    {% if PUSHER_KEY %}
+      window.onload = event => {
+        pusher = new Pusher('{{ PUSHER_KEY }}', {cluster: '{{ PUSHER_CLUSTER }}'});
+        channel = pusher.subscribe('draftedPlayers');
+        channel.bind('playerDrafted', (data) => {
+          console.log('playerDrafted notification received', data);
+
+          Toastify({
+            text: data[2].player + ' was picked by ' + data[2].owner,
+            duration: 5000,
+          }).showToast();
+
+          htmx.trigger(document.body, "player-drafted");
+        });
+      }
+    {% endif %}
+
     {# From: https://htmx.org/examples/modal-bootstrap/ #}
     function closeModal() {
       let container = document.getElementById("modals-here");

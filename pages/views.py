@@ -1,5 +1,7 @@
 from datetime import datetime
 
+import pusher
+from django.conf import settings
 from django.contrib import messages
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import QuerySet
@@ -153,6 +155,8 @@ class DraftView(DraftBaseView):
             context = self._build_team_players_context(context)
             context = self._build_last_picks_context(context)
 
+        context["PUSHER_KEY"] = settings.PUSHER_KEY
+        context["PUSHER_CLUSER"] = settings.PUSHER_CLUSTER
         return self.render_to_response(context)
 
 
@@ -187,6 +191,16 @@ class DraftPlayerView(TemplateView):
             player.pick = context["pick"]
             player.picktime = datetime.now()
             player.save()
+
+            if settings.PUSHER_KEY:
+                p = pusher.Pusher(
+                    app_id=settings.PUSHER_APP_ID,
+                    key=settings.PUSHER_KEY,
+                    secret=settings.PUSHER_SECRET,
+                    cluster=settings.PUSHER_CLUSTER,
+                )
+                p.trigger("draftedPlayers", "playerDrafted", Player.objects.fetch_last_picks())
+
             return HttpResponse(headers={"HX-Trigger": "player-drafted"})
         else:
             return self.render_to_response(context)
