@@ -79,11 +79,13 @@
 {% block after-container %}
 {% endblock %}
 
-<footer class="footer mt-3">
-  <div class="container">
-    <p class="text-muted">2025 djleague-htmx</p>
-  </div>
-</footer>
+{% block footer %}
+  <footer class="footer mt-3">
+    <div class="container">
+      <p class="text-muted">2025 djleague-htmx</p>
+    </div>
+  </footer>
+{% endblock %}
 
 {% block javascript %}
   <script src="https://unpkg.com/htmx.org@2.0.4"

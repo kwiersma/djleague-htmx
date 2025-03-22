@@ -1,0 +1,16 @@
+<table id="picksTable" style="width: 100%;">
+  <tbody>
+  <tr style="vertical-align: top;">
+    <td style="text-align: right;"><span class="badge bg-danger">On the clock: </span></td>
+    <td>{{ current_pick.owner }} (R {{ current_pick.round }} P {{ current_pick.pick }})</td>
+    <td style="text-align: right;"><span class="badge bg-success">Last Pick: </span></td>
+    <td>{{ last_pick.player }} by {{ last_pick.fantasyteam }} ({{ last_pick.owner }})</td>
+  </tr>
+  <tr>
+    <td style="text-align: right;"><span class="badge bg-warning">On deck:</span></td>
+    <td>{{ on_deck.owner }}</td>
+    <td style="text-align: right;"><span class="badge bg-success">Before Last Pick: </span></td>
+    <td>{{ before_last_pick.player }} by {{ before_last_pick.fantasyteam }} ({{ before_last_pick.owner }})</td>
+  </tr>
+  </tbody>
+</table>

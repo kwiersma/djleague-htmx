@@ -1,3 +1,4 @@
+from datetime import datetime
 from http import HTTPStatus
 
 from django.urls import reverse
@@ -246,3 +247,44 @@ class TestDraftPlayerView(BaseTestCase):
         self.assertEqual(player.fantasyteam, self.team)
         self.assertEqual(player.pick, 1)
         self.assertEqual(player.round, 1)
+
+
+class TestLastPicksView(BaseTestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.team1 = factories.FantasyTeamFactory(draft_order=1)
+        cls.team2 = factories.FantasyTeamFactory(draft_order=2)
+        cls.team3 = factories.FantasyTeamFactory(draft_order=3)
+        cls.url = reverse("last_picks")
+
+    def test_no_picks(self):
+        # Act
+        resp = self.client.get(self.url, headers={"HX-Request": "true"})
+
+        # Assert
+        self.assertEqual(resp.status_code, HTTPStatus.OK)
+        self.assertEqual(resp.template_name, ["draft/_last_picks.html"])
+        self.assertEqual(resp.context_data["current_pick"]["owner"], self.team1.owner)
+        self.assertEqual(resp.context_data["current_pick"]["round"], 1)
+        self.assertEqual(resp.context_data["current_pick"]["pick"], 1)
+        self.assertEqual(resp.context_data["on_deck"]["owner"], "")
+
+    def test_after_first_pick(self):
+        # Arrange
+        player = factories.Player(fantasyteam=self.team1, round=1, pick=1, picktime=datetime.now())
+
+        # Act
+        resp = self.client.get(self.url, headers={"HX-Request": "true"})
+
+        # Assert
+        self.assertEqual(resp.status_code, HTTPStatus.OK)
+        self.assertEqual(resp.template_name, ["draft/_last_picks.html"])
+        self.assertEqual(resp.context_data["current_pick"]["owner"], self.team2.owner)
+        self.assertEqual(resp.context_data["current_pick"]["round"], 1)
+        self.assertEqual(resp.context_data["current_pick"]["pick"], 2)
+        self.assertEqual(resp.context_data["last_pick"]["fantasyteam"], self.team1.name)
+        self.assertEqual(resp.context_data["last_pick"]["owner"], self.team1.owner)
+        self.assertEqual(resp.context_data["last_pick"]["round"], 1)
+        self.assertEqual(resp.context_data["last_pick"]["pick"], 1)
+        self.assertEqual(resp.context_data["on_deck"]["owner"], self.team3.owner)

@@ -129,16 +129,28 @@ class DraftBaseView(TemplateView):
         )
         return context
 
+    def _build_last_picks_context(self, context: dict | None = None) -> dict:
+        picks = Player.objects.fetch_last_picks()
+        if not context:
+            context = dict()
+        context["current_pick"] = picks[0]
+        context["last_pick"] = picks[2] if len(picks) > 2 else dict()
+        context["on_deck"] = picks[1] if len(picks) > 1 else dict()
+        context["before_last_pick"] = picks[3] if len(picks) > 3 else dict()
+        return context
+
 
 class DraftView(DraftBaseView):
     template_name = "draft/draft.html"
 
     def get(self, request, *args, **kwargs):
         context = self._build_search_context()
-        context = self._build_team_players_context(context)
 
         if request.headers.get("HX-Request"):
             self.template_name = "draft/_players.html"
+        else:
+            context = self._build_team_players_context(context)
+            context = self._build_last_picks_context(context)
 
         return self.render_to_response(context)
 
@@ -192,3 +204,11 @@ class DraftPlayerView(TemplateView):
             pick=pick, player=player, round=round, current_fantasyteam_id=picks[0]["fantasyteam_id"]
         )
         return context
+
+
+class LastPicksView(DraftBaseView):
+    template_name = "draft/_last_picks.html"
+
+    def get(self, request, *args, **kwargs):
+        context = self._build_last_picks_context()
+        return self.render_to_response(context)

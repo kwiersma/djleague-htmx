@@ -89,6 +89,14 @@
 
 {% endblock %}
 
+{% block footer %}
+  <nav style="margin-bottom: 0px;"
+       class="alert alert-info navbar navbar-expand navbar-light fixed-bottom"
+       hx-get="{% url 'last_picks' %}" hx-target="#picksTable" hx-trigger="player-drafted from:body">
+    {% include "draft/_last_picks.html" %}
+  </nav>
+{% endblock %}
+
 {% block javascript %}
   {{ block.super }}
   <script type="application/javascript">
