@@ -19,7 +19,7 @@ tblib = "*"  # Used by Django for parallel test run exception reporting
 gunicorn = "==23.0.0"
 psycopg = {extras = ["binary", "pool"], version = "==3.2.5"}
 whitenoise = {extras = ["brotli"], version = "==6.9.0"}
-flake8 = "==7.1.2"
+flake8 = "==7.2.0"
 flake8-bugbear = "==24.12.12"
 unittest-xml-reporting = "==3.2.0"
 pusher = "==3.3.3"
