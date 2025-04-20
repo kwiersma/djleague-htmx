@@ -26,16 +26,4 @@
   document.body.setAttribute('hx-headers', '{"X-CSRFToken": "{{ csrf_token }}"}');
 </script>
 
-{% if messages %}
-  <div id="dj-messages" hx-swap-oob="true">
-    <div class="row justify-content-center p-4 p-lg-0">
-      <div class="col-sm-12 col-md-12">
-        <ul class="list-unstyled messages">
-          {% for message in messages %}
-            <li class="alert alert-{{ message.tags }}">{{ message|safe }}</li>
-          {% endfor %}
-        </ul>
-      </div>
-    </div>
-  </div>
-{% endif %}
+{% include 'fantasyteams/_messages.html' %}

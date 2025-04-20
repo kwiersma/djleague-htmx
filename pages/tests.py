@@ -79,7 +79,11 @@ class TestTeamEditView(BaseTestCase):
 
         # Assert
         self.assertEqual(resp.status_code, HTTPStatus.OK)
-        self.assertEqual(resp.headers["HX-Redirect"], reverse("teams"))
+        self.assertEqual(resp.context_data["team"], self.team)
+        self.assertTemplateUsed(resp, "fantasyteams/_row.html")
+        message = list(resp.context.get("messages"))[0]
+        self.assertEqual(message.tags, "success")
+        self.assertIn("Team successfully updated", message.message)
 
     def test_happy(self):
         # Act
@@ -120,6 +124,7 @@ class TestTeamEditView(BaseTestCase):
         message = list(resp.context.get("messages"))[0]
         self.assertEqual(message.tags, "warning")
         self.assertIn("Missing team information", message.message)
+        self.assertFormError(resp.context_data["form"], "name", "This field is required.")
 
 
 class TestDraftView(BaseTestCase):

@@ -4,26 +4,31 @@
 
 {% block content %}
 
-  <table class="table table-striped">
-    <thead>
-    <tr>
-      <th>Draft Order</th>
-      <th>Team</th>
-      <th>Owner</th>
-      <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    {% if teams %}
-      {% for team in teams %}
-        {% include "fantasyteams/_row.html" %}
-      {% endfor %}
-    {% else %}
-      <tr>
-        <td colspan="4">No teams have been entered</td>
-      </tr>
-    {% endif %}
-    </tbody>
-  </table>
-
+  <div class="row">
+    <div class="col-1"></div>
+    <div class="col-10">
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>Draft Order</th>
+          <th>Team</th>
+          <th>Owner</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if teams %}
+          {% for team in teams %}
+            {% include "fantasyteams/_row.html" %}
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td colspan="4">No teams have been entered</td>
+          </tr>
+        {% endif %}
+        </tbody>
+      </table>
+    </div>
+    <div class="col-1"></div>
+  </div>
 {% endblock %}

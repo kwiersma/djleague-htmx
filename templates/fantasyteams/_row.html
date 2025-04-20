@@ -14,3 +14,7 @@
          src="{% static "images/spinner.gif" %}" alt="loading" />
   </td>
 </tr>
+
+{% if include_messages %}
+  {% include 'fantasyteams/_messages.html' %}
+{% endif %}

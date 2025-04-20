@@ -56,16 +56,18 @@ class TeamEditView(generic.UpdateView):
 
         if not request.headers.get("HX-Request"):
             self.template_name = "fantasyteams/edit.html"
+            form = FantasyTeamForm(request.POST, instance=team)
+        else:
+            form = FantasyTeamInlineForm(request.POST, instance=team)
 
-        form = FantasyTeamForm(request.POST, instance=team)
         if form.is_valid():
             form.save()
             messages.success(request, "Team successfully updated")
             if not request.headers.get("HX-Request"):
                 return redirect(reverse("teams"))
             else:
-                response = HttpResponse(headers={"HX-Redirect": reverse("teams")})
-                return response
+                self.template_name = "fantasyteams/_row.html"
+                return self.render_to_response(dict(team=form.instance, include_messages=True))
         else:
             messages.warning(request, "Missing team information")
             return self.render_to_response(dict(form=form))

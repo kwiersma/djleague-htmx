@@ -53,19 +53,7 @@
 <main role="main">
   <div class="container-fluid">
 
-    <div id="dj-messages">
-      {% if messages %}
-        <div class="row justify-content-center p-4 p-lg-0">
-          <div class="col-sm-12 col-md-12">
-            <ul class="list-unstyled messages">
-              {% for message in messages %}
-                <li class="alert alert-{{ message.tags }}">{{ message|safe }}</li>
-              {% endfor %}
-            </ul>
-          </div>
-        </div>
-      {% endif %}
-    </div>
+    {% include 'fantasyteams/_messages.html' %}
 
     {% block headline %}
     {% endblock %}
