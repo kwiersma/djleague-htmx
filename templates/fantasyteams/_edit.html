@@ -10,13 +10,13 @@
             hx-post="{% url 'team_edit' form.instance.id %}"
             hx-include="closest tr"
             hx-target="closest tr"
-            hx-swap="outerHTML">
+            hx-swap="outerHTML transition:true">
       Save Team
     </button>
     <button class="btn btn-danger"
             hx-get="{% url 'team_row' form.instance.id %}"
             hx-target="closest tr"
-            hx-swap="outerHTML">
+            hx-swap="outerHTML transition:true">
       Cancel
     </button>
   </td>

@@ -11,3 +11,7 @@ label {
 .form-check label {
   font-weight: normal;
 }
+
+@view-transition {
+  navigation: auto;
+}

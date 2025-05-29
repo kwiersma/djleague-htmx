@@ -60,7 +60,6 @@
                hx-get="{% url 'draft_player' player.id %}"
                hx-target="#modals-here"
                hx-trigger="click"
-               _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop"
             >Draft</a>
           {% endif %}
         </td>
@@ -78,6 +77,7 @@
                href="{{ filter.query_string }}&page={{ pagination.previous_page_number }}"
                hx-get="{{ filter.query_string }}&page={{ pagination.previous_page_number }}"
                hx-target="#players"
+               hx-swap="transition:true"
                hx-push-url="true">
               &lt;
             </a>
@@ -90,6 +90,7 @@
                href="{{ filter.query_string }}&page={{ pagination.next_page_number }}"
                hx-get="{{ filter.query_string }}&page={{ pagination.next_page_number }}"
                hx-target="#players"
+               hx-swap="transition:true"
                hx-push-url="true">
               &gt;
             </a>

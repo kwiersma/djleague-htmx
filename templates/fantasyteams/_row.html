@@ -1,6 +1,6 @@
 {% load static %}
 
-<tr id="team_{{ team.id }}" hx-target="this" hx-swap="outerHTML">
+<tr id="team_{{ team.id }}" hx-target="this" hx-swap="outerHTML transition:true">
   <td>{{ team.draft_order }}</td>
   <td><a href="{% url "team_edit" team.id %}">{{ team.name }}</a></td>
   <td>{{ team.owner }}</td>

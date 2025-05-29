@@ -10,7 +10,10 @@
       <div class="row">
 
         {# Draft order #}
-        <div hx-get="{% url 'upcoming_picks' %}" hx-target="#upcoming-picks" hx-trigger="revealed, player-drafted from:body">
+        <div hx-get="{% url 'upcoming_picks' %}"
+             hx-target="#upcoming-picks"
+             hx-swap="transition:true"
+             hx-trigger="revealed, player-drafted from:body">
           <div id="upcoming-picks"></div>
         </div>
 
@@ -18,7 +21,9 @@
         <div class="card">
           <div class="card-header">
             <select name="fantasyteam" class="form-select"
-              hx-get="{% url "team_players" %}" hx-target="#team-players"
+              hx-get="{% url "team_players" %}"
+              hx-target="#team-players"
+              hx-swap="transition:true"
               hx-trigger="change, player-drafted from:body">
               {% for team in teams %}
                 <option value="{{ team.id }}"
@@ -84,7 +89,10 @@
 {% block footer %}
   <nav style="margin-bottom: 0px;"
        class="alert alert-info navbar navbar-expand navbar-light fixed-bottom"
-       hx-get="{% url 'last_picks' %}" hx-target="#picksTable" hx-trigger="player-drafted from:body">
+       hx-get="{% url 'last_picks' %}"
+       hx-target="#picksTable"
+       hx-swap="transition:true"
+       hx-trigger="player-drafted from:body">
     {% include "draft/_last_picks.html" %}
   </nav>
 {% endblock %}
