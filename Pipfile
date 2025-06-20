@@ -6,7 +6,7 @@ name = "pypi"
 [packages]
 black = "==25.1.0"
 django = "==5.1.8"
-django-health-check = "==3.18.3"
+django-health-check = "==3.20.0"
 environs = {extras = ["django"], version = "==14.1.1"}
 python-dateutil = "==2.9.0.post0"
 sentry-sdk = "==2.19.1"
