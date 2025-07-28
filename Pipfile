@@ -13,7 +13,7 @@ sentry-sdk = "==2.19.1"
 django-crispy-forms = "==2.4"
 crispy-bootstrap5 = "==2025.6"
 factory-boy = "==3.3.3"
-django-debug-toolbar = "==5.1.0"
+django-debug-toolbar = "==6.0.0"
 django-filter = "==25.1"
 tblib = "*"  # Used by Django for parallel test run exception reporting
 gunicorn = "==23.0.0"
