@@ -7,7 +7,7 @@ name = "pypi"
 black = "==25.1.0"
 django = "==5.1.8"
 django-health-check = "==3.18.3"
-environs = {extras = ["django"], version = "==14.1.1"}
+environs = {extras = ["django"], version = "==14.3.0"}
 python-dateutil = "==2.9.0.post0"
 sentry-sdk = "==2.19.1"
 django-crispy-forms = "==2.4"
