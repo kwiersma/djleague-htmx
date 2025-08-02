@@ -11,12 +11,12 @@ To run the project locally you will want to install the following:
 
 Once those are installed then you can run the following commands to start up the app.
 
-1. Install pipenv `pip install pipenv`
-2. Install Python packages `pipenv install`
+1. [Install uv](https://docs.astral.sh/uv/getting-started/installation/)
+2. Install Python packages `uv sync`
 3. Copy template `.env` file `cp .env.template .env`
 4. Start the DB container in the background `docker compose up -d`
-5. Create or update the database structure: `pipenv run python ./manage.py migrate`
-6. Run the local server: `pipenv run python manage.py runserver`
+5. Create or update the database structure: `uv run python ./manage.py migrate`
+6. Run the local server: `uv run python manage.py runserver`
 7. Load the site at [http://127.0.0.1:8000](http://127.0.0.1:8000)
 
 ## Functionality
@@ -32,7 +32,7 @@ Includes integration level tests for the API and login functionality powered by 
 The tests currently use `unittest` and the Django test runner.
 
 ```bash
-pipenv run python ./manage.py test --reverse --parallel --keepdb
+uv run python ./manage.py test --reverse --parallel --keepdb
 ```
 
 ## Pre-commit

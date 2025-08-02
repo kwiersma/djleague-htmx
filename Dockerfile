@@ -1,5 +1,6 @@
 # syntax=docker/dockerfile:1
 FROM python:3.12-slim-bookworm
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
 
 # Lint with Hadolint:
 # docker run --rm -i hadolint/hadolint < Dockerfile
@@ -28,27 +29,26 @@ RUN mkdir $HOME/.ssh
 WORKDIR $APP_HOME
 
 # Install dependencies
-COPY ./Pipfile .
-COPY ./Pipfile.lock .
-RUN pip install --upgrade pip setuptools wheel --no-cache-dir &&  \
-    pip install pipenv--no-cache-dir &&  \
-    pipenv install --ignore-pipfile
+COPY ./pyproject.toml .
+COPY ./uv.lock .
+RUN pip install --upgrade pip setuptools wheel --no-cache-dir
+RUN uv sync --frozen
 
 # copy project
 COPY . $APP_HOME
 
 # chown all the files to the app user
-RUN chown -R app:app $APP_HOME && chown -R app:app $HOME/.ssh && chmod 700 $HOME/.ssh
+RUN chown -R app:app $APP_HOME && chown -R app:app $HOME/.ssh && chmod 700 $HOME/.ssh && \
+    chown -R app:app $HOME/.cache
 
 # change to the app user
 USER app
 
 # Collect static files
 RUN export DJANGO_SETTINGS_MODULE=djleague.settings &&  \
-    pipenv run ./manage.py collectstatic --no-input
+    uv run ./manage.py collectstatic --no-input
 
 # https://twitter.com/kjrjay/status/1532624896509067264
 # https://github.com/morninj/django-docker/blob/master/Dockerfile
-# CMD ["supervisord", "-n", "-c", "./supervisord.ini"]
-# CMD ["pipenv", "run", "gunicorn", "djleague.wsgi:application", "--timeout", "120", "--workers", "3"]
+# CMD ["uv", "run", "gunicorn", "djleague.wsgi:application", "--timeout", "120", "--workers", "3"]
 CMD bash -c ". entrypoint.sh"
