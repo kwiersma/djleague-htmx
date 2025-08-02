@@ -10,7 +10,7 @@ dependencies = [
     "crispy-bootstrap5==2025.6",
     "django==5.1.8",
     "django-crispy-forms==2.4",
-    "django-debug-toolbar==5.1.0",
+    "django-debug-toolbar==6.0.0",
     "django-filter==25.1",
     "django-health-check==3.18.3",
     "environs[django]==14.1.1",
