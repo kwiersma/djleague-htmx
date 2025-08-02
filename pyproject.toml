@@ -13,7 +13,7 @@ dependencies = [
     "django-debug-toolbar==6.0.0",
     "django-filter==25.1",
     "django-health-check==3.20.0",
-    "environs[django]==14.1.1",
+    "environs[django]==14.3.0",
     "factory-boy==3.3.3",
     "flake8==7.3.0",
     "flake8-bugbear==24.12.12",

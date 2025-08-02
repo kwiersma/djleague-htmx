@@ -356,7 +356,7 @@ requires-dist = [
     { name = "django-debug-toolbar", specifier = "==6.0.0" },
     { name = "django-filter", specifier = "==25.1" },
     { name = "django-health-check", specifier = "==3.20.0" },
-    { name = "environs", extras = ["django"], specifier = "==14.1.1" },
+    { name = "environs", extras = ["django"], specifier = "==14.3.0" },
     { name = "factory-boy", specifier = "==3.3.3" },
     { name = "flake8", specifier = "==7.3.0" },
     { name = "flake8-bugbear", specifier = "==24.12.12" },
@@ -372,15 +372,15 @@ requires-dist = [
 
 [[package]]
 name = "environs"
-version = "14.1.1"
+version = "14.3.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "marshmallow" },
     { name = "python-dotenv" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/31/d3/e82bdbb8cc332e751f67a3f668c5d134d57f983497d9f3a59a375b6e8fd8/environs-14.1.1.tar.gz", hash = "sha256:03db7ee2d50ec697b68814cd175a3a05a7c7954804e4e419ca8b570dc5a835cf", size = 32050, upload-time = "2025-02-10T20:24:26.437Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/7f/7c/db59db76a70254aa0f9de2b509379b09ab89b2c1fa309acb8daf02e06ec2/environs-14.3.0.tar.gz", hash = "sha256:20672d92db325ce8114872b1989104eb84f083486325b5a44bcddff56472a384", size = 34209, upload-time = "2025-08-01T15:56:54.39Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f4/1c/ab9752f02d32d981d647c05822be9ff93809be8953dacea2da2bec9a9de9/environs-14.1.1-py3-none-any.whl", hash = "sha256:45bc56f1d53bbc59d8dd69bba97377dd88ec28b8229d81cedbd455b21789445b", size = 15566, upload-time = "2025-02-10T20:24:22.116Z" },
+    { url = "https://files.pythonhosted.org/packages/ad/e3/98d8567eb438c7856a4dcedd97a8a7c6707120a5ada6f7d84ace44fd8591/environs-14.3.0-py3-none-any.whl", hash = "sha256:91e4c4ea964be277855cdd83a588f6375f10fad9fa452660ecb9f503c230f26a", size = 16355, upload-time = "2025-08-01T15:56:52.897Z" },
 ]
 
 [package.optional-dependencies]
