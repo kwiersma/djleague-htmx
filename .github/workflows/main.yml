@@ -21,22 +21,30 @@ jobs:
           --health-retries 5
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v2
         with:
-          python-version: '3.12'
-          cache: 'pipenv'
-      - run: pipx install pipenv
-      - run: pipenv install --ignore-pipfile
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: "pyproject.toml"
+
+      - name: Install the project
+        run: uv sync --all-extras --dev
 
       - name: Run flake8
-        run: pipenv run flake8
+        run: uv run flake8
 
       - name: Run black
-        run: pipenv run black --check --verbose .
+        run: uv run black --check --verbose .
 
         # The tests need some of the static files
       - name: Run manage.py collectstatic
-        run: pipenv run ./manage.py collectstatic --noinput
+        run: uv run ./manage.py collectstatic --noinput
 
       - name: Run tests
-        run: pipenv run ./manage.py test --reverse --parallel
+        run: uv run ./manage.py test --reverse --parallel
