@@ -364,7 +364,7 @@ requires-dist = [
     { name = "psycopg", extras = ["binary", "pool"], specifier = "==3.2.9" },
     { name = "pusher", specifier = "==3.3.3" },
     { name = "python-dateutil", specifier = "==2.9.0.post0" },
-    { name = "sentry-sdk", specifier = "==2.34.1" },
+    { name = "sentry-sdk", specifier = "==2.35.2" },
     { name = "tblib", specifier = ">=3.1.0" },
     { name = "unittest-xml-reporting", specifier = "==3.2.0" },
     { name = "whitenoise", extras = ["brotli"], specifier = "==6.9.0" },
@@ -756,15 +756,15 @@ wheels = [
 
 [[package]]
 name = "sentry-sdk"
-version = "2.34.1"
+version = "2.35.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "certifi" },
     { name = "urllib3" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/3a/38/10d6bfe23df1bfc65ac2262ed10b45823f47f810b0057d3feeea1ca5c7ed/sentry_sdk-2.34.1.tar.gz", hash = "sha256:69274eb8c5c38562a544c3e9f68b5be0a43be4b697f5fd385bf98e4fbe672687", size = 336969, upload-time = "2025-07-30T11:13:37.93Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/bd/79/0ecb942f3f1ad26c40c27f81ff82392d85c01d26a45e3c72c2b37807e680/sentry_sdk-2.35.2.tar.gz", hash = "sha256:e9e8f3c795044beb59f2c8f4c6b9b0f9779e5e604099882df05eec525e782cc6", size = 343377, upload-time = "2025-09-01T11:00:58.633Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/2d/3e/bb34de65a5787f76848a533afbb6610e01fbcdd59e76d8679c254e02255c/sentry_sdk-2.34.1-py2.py3-none-any.whl", hash = "sha256:b7a072e1cdc5abc48101d5146e1ae680fa81fe886d8d95aaa25a0b450c818d32", size = 357743, upload-time = "2025-07-30T11:13:36.145Z" },
+    { url = "https://files.pythonhosted.org/packages/c0/91/a43308dc82a0e32d80cd0dfdcfca401ecbd0f431ab45f24e48bb97b7800d/sentry_sdk-2.35.2-py2.py3-none-any.whl", hash = "sha256:38c98e3cbb620dd3dd80a8d6e39c753d453dd41f8a9df581b0584c19a52bc926", size = 363975, upload-time = "2025-09-01T11:00:56.574Z" },
 ]
 
 [[package]]
