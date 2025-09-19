@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = "~=3.12"
 
 dependencies = [
-    "black==25.1.0",
+    "black==25.9.0",
     "crispy-bootstrap5==2025.6",
     "django==5.1.8",
     "django-crispy-forms==2.4",
