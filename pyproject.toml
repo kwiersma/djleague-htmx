@@ -18,7 +18,7 @@ dependencies = [
     "flake8==7.3.0",
     "flake8-bugbear==25.10.21",
     "gunicorn==23.0.0",
-    "psycopg[binary,pool]==3.2.9",
+    "psycopg[binary,pool]==3.2.12",
     "pusher==3.3.3",
     "python-dateutil==2.9.0.post0",
     "sentry-sdk==2.39.0",
