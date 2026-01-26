@@ -12,7 +12,7 @@ dependencies = [
     "django-crispy-forms==2.4",
     "django-debug-toolbar==6.1.0",
     "django-filter==25.1",
-    "django-health-check==3.20.0",
+    "django-health-check==3.20.8",
     "environs[django]==14.5.0",
     "factory-boy==3.3.3",
     "flake8==7.3.0",
