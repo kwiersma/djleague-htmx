@@ -17,7 +17,7 @@ dependencies = [
     "factory-boy==3.3.3",
     "flake8==7.3.0",
     "flake8-bugbear==25.11.29",
-    "gunicorn==23.0.0",
+    "gunicorn==24.1.1",
     "psycopg[binary,pool]==3.2.9",
     "pusher==3.3.3",
     "python-dateutil==2.9.0.post0",
